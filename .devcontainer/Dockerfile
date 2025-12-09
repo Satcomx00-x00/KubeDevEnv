@@ -33,7 +33,7 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/
 #     && rm cuda-keyring_1.1-1_all.deb
 
 # Install Python LLM libraries
-RUN pip install --no-cache-dir torch torchvision torchaudio transformers accelerate bitsandbytes
+# RUN pip install --no-cache-dir torch torchvision torchaudio transformers accelerate bitsandbytes
 
 # Install Bun
 ENV BUN_INSTALL=/usr/local/bun
