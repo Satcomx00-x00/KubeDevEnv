@@ -2,13 +2,21 @@ version: '3.8'
 
 services:
   workspace:
-    image: ghcr.io/satcomx00-x00/kubedevenv:latest
-    # build: 
-    #   context: .
-    #   dockerfile: Dockerfile
+    # image: ghcr.io/satcomx00-x00/kubedevenv:latest
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     volumes:
       - ..:/workspaces/KubeDevEnv:cached
       - ../dotfiles:/home/codespace/.dotfiles_source
+      - home-data:/home/codespace
     command: sleep infinity
     privileged: true
     init: true
@@ -41,6 +49,7 @@ services:
 volumes:
   postgres-data:
   redis-data:
+  home-data:
 
 networks:
   dev-network:
