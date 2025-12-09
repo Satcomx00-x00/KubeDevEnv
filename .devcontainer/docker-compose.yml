@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  workspace:
+    image: ghcr.io/satcomx00-x00/kubedevenv:latest
+    # build: 
+    #   context: .
+    #   dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/KubeDevEnv:cached
+      - ../dotfiles:/home/vscode/.dotfiles_source
+    command: sleep infinity
+    privileged: true
+    init: true
+    depends_on:
+      - db
+      - redis
+    networks:
+      - dev-network
+
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: devdb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - dev-network
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - dev-network
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  dev-network:
+    driver: bridge

@@ -1,0 +1,20 @@
+// Zellij Configuration
+// See https://zellij.dev/documentation/configuration.html
+
+theme "dracula"
+
+default_layout "compact"
+
+// Keybindings
+keybinds {
+    normal {
+        // bind "Ctrl g" { SwitchToMode "Locked"; }
+    }
+}
+
+// UI
+ui {
+    pane_frames {
+        rounded_corners true
+    }
+}
