@@ -1,18 +1,18 @@
 #!/bin/bash
 
 # Setup dotfiles
-if [ -d "/home/vscode/.dotfiles_source" ]; then
+if [ -d "$HOME/.dotfiles_source" ]; then
     echo "Setting up dotfiles..."
     # Copy files, including hidden ones, overwriting existing
-    cp -r /home/vscode/.dotfiles_source/. /home/vscode/
+    cp -r $HOME/.dotfiles_source/. $HOME/
     echo "Dotfiles copied."
 fi
 
 # Setup Powerlevel10k
 if [ -d "/usr/share/powerlevel10k" ]; then
-    mkdir -p /home/vscode/.oh-my-zsh/custom/themes
-    if [ ! -d "/home/vscode/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
-        ln -s /usr/share/powerlevel10k /home/vscode/.oh-my-zsh/custom/themes/powerlevel10k
+    mkdir -p ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes
+    if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+        ln -s /usr/share/powerlevel10k ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
         echo "Powerlevel10k linked."
     fi
 fi
