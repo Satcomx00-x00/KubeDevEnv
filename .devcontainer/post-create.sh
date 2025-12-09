@@ -8,6 +8,15 @@ if [ -d "/home/vscode/.dotfiles_source" ]; then
     echo "Dotfiles copied."
 fi
 
+# Setup Powerlevel10k
+if [ -d "/usr/share/powerlevel10k" ]; then
+    mkdir -p /home/vscode/.oh-my-zsh/custom/themes
+    if [ ! -d "/home/vscode/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
+        ln -s /usr/share/powerlevel10k /home/vscode/.oh-my-zsh/custom/themes/powerlevel10k
+        echo "Powerlevel10k linked."
+    fi
+fi
+
 # Print info
 echo "Environment setup complete."
 echo "Redis is available at host 'redis' port 6379."

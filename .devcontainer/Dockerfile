@@ -22,9 +22,7 @@ RUN curl -L https://github.com/zellij-org/zellij/releases/latest/download/zellij
     && chmod +x /usr/local/bin/zellij
 
 # Install Powerlevel10k
-RUN mkdir -p /home/vscode/.oh-my-zsh/custom/themes \
-    && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /home/vscode/.oh-my-zsh/custom/themes/powerlevel10k \
-    && chown -R vscode:vscode /home/vscode/.oh-my-zsh
+RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/powerlevel10k
 
 # Clean up
 RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
