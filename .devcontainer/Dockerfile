@@ -28,7 +28,8 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb \
     && dpkg -i cuda-keyring_1.1-1_all.deb \
     && apt-get update \
-    && apt-get install -y cuda-toolkit-12-3 nvtop git-lfs \
+    && apt-get install -y --no-install-recommends cuda-nvcc-12-3 cuda-libraries-dev-12-3 nvtop git-lfs \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && rm cuda-keyring_1.1-1_all.deb
 
 # Install Python LLM libraries
