@@ -19,6 +19,13 @@ This is a fully configured Development Environment designed for VS Code Remote -
 
 ## Getting Started
 
+### Windows Setup (Optional)
+If you are on Windows, you can run the included PowerShell script to set up prerequisites and launch the stack:
+```powershell
+./setup-env.ps1
+```
+
+### Open in Container
 1. **Prerequisites**:
    - Docker Desktop (Windows/Mac) or Docker Engine (Linux).
    - VS Code with "Dev Containers" extension.
