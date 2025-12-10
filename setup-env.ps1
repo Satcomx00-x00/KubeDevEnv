@@ -60,6 +60,7 @@ if ($deployStack -eq 'Y' -or $deployStack -eq 'y') {
             Write-Host "✅ Stack deployed!" -ForegroundColor Green
             Write-Host "   Redis: localhost:6379"
             Write-Host "   Postgres: localhost:5432"
+            Write-Host "   Portainer: localhost:9000"
         } catch {
             Write-Error "Failed to deploy stack. Ensure Docker is running."
         }
