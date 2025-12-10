@@ -49,36 +49,65 @@ Check-And-Install -Name "Kubectl" -Command "kubectl" -WingetId "Kubernetes.kubec
 Check-And-Install -Name "Helm" -Command "helm" -WingetId "Helm.Helm"
 Check-And-Install -Name "Minikube" -Command "minikube" -WingetId "Kubernetes.minikube"
 
-# 2. Deploy Docker Compose Stack
-Write-Header "Stack Deployment"
-$deployStack = Read-Host "Do you want to deploy the Docker Compose stack (Redis, Postgres)? (Y/N)"
-if ($deployStack -eq 'Y' -or $deployStack -eq 'y') {
-    if (Test-Path ".devcontainer/docker-compose.yml") {
-        Write-Host "Deploying stack..." -ForegroundColor Yellow
-        try {
-            docker compose -f .devcontainer/docker-compose.yml up -d
-            Write-Host "✅ Stack deployed!" -ForegroundColor Green
-            Write-Host "   Redis: localhost:6379"
-            Write-Host "   Postgres: localhost:5432"
-            Write-Host "   Portainer: localhost:9000"
-        } catch {
-            Write-Error "Failed to deploy stack. Ensure Docker is running."
-        }
-    } else {
-        Write-Error "docker-compose.yml not found in .devcontainer/"
-    }
-}
-
-# 3. Start Minikube
+# 2. Start Minikube
 Write-Header "Minikube"
 $startMinikube = Read-Host "Do you want to start Minikube? (Y/N)"
 if ($startMinikube -eq 'Y' -or $startMinikube -eq 'y') {
     Write-Host "Starting Minikube..." -ForegroundColor Yellow
-    try {
-        minikube start
+    
+    # Clear existing Docker environment variables
+    Remove-Item Env:\DOCKER_TLS_VERIFY -ErrorAction SilentlyContinue
+    Remove-Item Env:\DOCKER_HOST -ErrorAction SilentlyContinue
+    Remove-Item Env:\DOCKER_CERT_PATH -ErrorAction SilentlyContinue
+    Remove-Item Env:\MINIKUBE_ACTIVE_DOCKERD -ErrorAction SilentlyContinue
+
+    minikube start -p minikube-docker --driver=docker
+    if ($LASTEXITCODE -eq 0) {
         Write-Host "✅ Minikube started!" -ForegroundColor Green
-    } catch {
+    } else {
         Write-Error "Failed to start Minikube."
+    }
+}
+
+# 3. Deploy Docker Compose Stack in Minikube
+Write-Header "Stack Deployment (Minikube)"
+$deployStack = Read-Host "Do you want to deploy the Docker Compose stack to Minikube? (Y/N)"
+if ($deployStack -eq 'Y' -or $deployStack -eq 'y') {
+    if (Test-Path ".devcontainer/docker-compose.yml") {
+        Write-Host "Configuring Docker environment for Minikube..." -ForegroundColor Yellow
+        try {
+            # Clear existing Docker environment variables to ensure Minikube command works
+            Remove-Item Env:\DOCKER_TLS_VERIFY -ErrorAction SilentlyContinue
+            Remove-Item Env:\DOCKER_HOST -ErrorAction SilentlyContinue
+            Remove-Item Env:\DOCKER_CERT_PATH -ErrorAction SilentlyContinue
+            Remove-Item Env:\MINIKUBE_ACTIVE_DOCKERD -ErrorAction SilentlyContinue
+
+            # Configure Docker to use Minikube's daemon
+            $minikubeEnv = minikube docker-env -p minikube-docker --shell powershell
+            if ($LASTEXITCODE -ne 0) {
+                throw "Failed to get Minikube Docker environment."
+            }
+            $minikubeEnv | Invoke-Expression
+            
+            if (-not $env:DOCKER_HOST) {
+                throw "Could not get Minikube Docker environment. Is Minikube running?"
+            }
+
+            Write-Host "Deploying dependencies (db, redis) to Minikube..." -ForegroundColor Yellow
+            Write-Host "   Note: Skipping 'workspace' container as Windows bind mounts are not supported in Minikube." -ForegroundColor Gray
+            docker compose -f .devcontainer/docker-compose.yml up -d db redis
+            
+            Write-Host "✅ Stack deployed to Minikube!" -ForegroundColor Green
+            
+            # Get Minikube IP for access info
+            $minikubeIp = minikube ip -p minikube-docker
+            Write-Host "   Redis: $minikubeIp:6379"
+            Write-Host "   Postgres: $minikubeIp:5432"
+        } catch {
+            Write-Error "Failed to deploy stack. $_"
+        }
+    } else {
+        Write-Error "docker-compose.yml not found in .devcontainer/"
     }
 }
 

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   workspace:
-    # image: ghcr.io/satcomx00-x00/kubedevenv:latest
+    image: ghcr.io/satcomx00-x00/kubedevenv:latest
     build: 
       context: .
       dockerfile: Dockerfile
@@ -46,23 +46,9 @@ services:
     networks:
       - dev-network
 
-  portainer:
-    image: portainer/portainer-ce:latest
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    ports:
-      - 9000:9000
-    networks:
-      - dev-network
-
 volumes:
   postgres-data:
   redis-data:
-  portainer_data:
   home-data:
 
 networks:
