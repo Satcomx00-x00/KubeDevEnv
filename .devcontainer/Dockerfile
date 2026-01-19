@@ -21,6 +21,12 @@ RUN curl -sSf https://raw.githubusercontent.com/supabase/cli/main/install.sh | s
 RUN curl -L https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz | tar xz -C /usr/local/bin \
     && chmod +x /usr/local/bin/zellij
 
+# Install chezmoi
+RUN sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
+
+# Copy dotfiles submodule for later initialization
+COPY dotfiles /tmp/dotfiles
+
 # Install Powerlevel10k
 RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/powerlevel10k
 

@@ -1,0 +1,3 @@
+[submodule ".devcontainer/dotfiles"]
+	path = .devcontainer/dotfiles
+	url = https://github.com/Satcomx00-x00/dotfiles

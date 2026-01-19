@@ -1,60 +1,60 @@
-# KubeDevEnv - State of the Art Dev Environment
+# KubeDevEnv
 
-This is a fully configured Development Environment designed for VS Code Remote - Containers.
+A development container environment for Kubernetes development with modern shell configurations.
 
 ## Features
 
-- **OS**: Microsoft Universal Image (Ubuntu-based)
-- **Services**:
-  - **Redis**: Available at `redis:6379`
-  - **PostgreSQL**: Available at `db:5432` (User: `postgres`, Pass: `postgrespassword`, DB: `devdb`)
-  - **Supabase**: CLI installed. Run `supabase init` and `supabase start` to launch a local stack.
-- **Tools**:
-  - `kubectl`, `helm`, `minikube` (via Docker-in-Docker)
-  - `node`, `python`, `zsh`, `git`
-  - `redis-tools`, `postgresql-client`
-  - `zellij` (Terminal Multiplexer)
-- **Dotfiles**: Automatically loads dotfiles from the `dotfiles/` directory in this repo.
-  - Includes pre-configured `.zshrc` (Oh My Zsh), `.gitconfig`, and `zellij` config.
+- **Docker-in-Docker** for container development
+- **Kubernetes tools**: kubectl, Helm, Minikube
+- **Modern shell**: Zsh with Oh My Zsh and Powerlevel10k theme
+- **Terminal multiplexer**: Zellij
+- **Dotfiles management**: Chezmoi with custom dotfiles
+- **Database tools**: PostgreSQL and Redis clients
+- **Supabase CLI** for local development
 
 ## Getting Started
 
-### Windows Setup (Optional)
-If you are on Windows, you can run the included PowerShell script to set up prerequisites and launch the stack:
-```powershell
-./setup-env.ps1
+### Using with VS Code
+
+1. Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+2. Clone this repository with submodules:
+   ```bash
+   git clone --recurse-submodules https://github.com/Satcomx00-x00/KubeDevEnv.git
+   ```
+3. Open in VS Code and click "Reopen in Container" when prompted
+
+### Updating Submodules
+
+To update the dotfiles submodule to the latest version:
+
+```bash
+git submodule update --remote .devcontainer/dotfiles
 ```
-
-### Open in Container
-1. **Prerequisites**:
-   - Docker Desktop (Windows/Mac) or Docker Engine (Linux).
-   - VS Code with "Dev Containers" extension.
-
-2. **Open in Container**:
-   - Open this folder in VS Code.
-   - Click "Reopen in Container" when prompted, or use the Command Palette (`F1` -> `Dev Containers: Reopen in Container`).
-
-3. **Usage**:
-   - **Terminals**: The default shell is `zsh`.
-   - **Databases**: Connect to Postgres using the "SQLTools" extension (pre-installed) or `psql`.
-   - **Supabase**:
-     ```bash
-     supabase init
-     supabase start
-     ```
-     *Note: Supabase runs its own stack (Postgres on 54322, etc.) so it won't conflict with the standalone Redis/Postgres services.*
-   - **Minikube**:
-     ```bash
-     minikube start
-     ```
-     *Note: Running Minikube inside a container requires privileged mode, which is enabled.*
 
 ## Dotfiles
 
-Place your dotfiles (e.g., `.zshrc`, `.gitconfig`, aliases) in the `dotfiles/` directory. They will be copied to `~` inside the container on creation.
+This project includes [dotfiles](https://github.com/Satcomx00-x00/dotfiles) as a submodule, managed by [chezmoi](https://www.chezmoi.io/). The dotfiles are automatically applied during container creation.
 
-## Windows Minikube Note
+### Customizing Dotfiles
 
-If you are running Minikube on Windows and want to connect to it from this container instead of running a nested Minikube:
-1. Ensure your Windows `~/.kube/config` is mounted or copied.
-2. Update the kubeconfig server URL to point to `host.docker.internal` instead of `127.0.0.1`.
+Edit `~/.config/chezmoi/chezmoi.toml` to personalize your configuration:
+
+```toml
+[data]
+    name = "Your Name"
+    email = "your.email@example.com"
+    editor = "code"
+
+[data.machine]
+    type = "devcontainer"
+```
+
+Then reapply with:
+
+```bash
+chezmoi apply
+```
+
+## License
+
+MIT License
