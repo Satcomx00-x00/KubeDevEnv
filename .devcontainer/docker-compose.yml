@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   workspace:
-    image: ghcr.io/satcomx00-x00/kubedevenv:latest
+    image: ghcr.io/satcomx00-x00/KubeDevEnv:latest
     build: 
       context: .
       dockerfile: Dockerfile

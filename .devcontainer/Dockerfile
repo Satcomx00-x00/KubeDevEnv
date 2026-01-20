@@ -3,6 +3,11 @@ FROM mcr.microsoft.com/devcontainers/universal:2
 # Install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
+    software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get update \
+    && apt-get -y install --no-install-recommends \
     postgresql-client \
     redis-tools \
     iputils-ping \
@@ -12,7 +17,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     zsh \
     vim \
     htop \
-    jq
+    jq \
+    python3.12 \
+    python3.12-venv \
+    nodejs
 
 # Install Supabase CLI
 RUN curl -sSf https://raw.githubusercontent.com/supabase/cli/main/install.sh | sh
@@ -23,6 +31,9 @@ RUN curl -L https://github.com/zellij-org/zellij/releases/latest/download/zellij
 
 # Install chezmoi
 RUN sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
+
+# Install Rustup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # Copy dotfiles submodule for later initialization
 COPY dotfiles /tmp/dotfiles
