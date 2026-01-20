@@ -3,10 +3,13 @@ FROM mcr.microsoft.com/devcontainers/universal:2
 # Install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
-    software-properties-common \
-    && add-apt-repository ppa:deadsnakes/ppa \
-    && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
-    && apt-get update \
+    software-properties-common
+
+RUN add-apt-repository ppa:deadsnakes/ppa
+
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
     postgresql-client \
     redis-tools \
@@ -21,6 +24,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     python3.12 \
     python3.12-venv \
     nodejs
+
+# Install uv for Python package management
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="$PATH:/root/.local/bin"
 
 # Install Supabase CLI
 RUN curl -sSf https://raw.githubusercontent.com/supabase/cli/main/install.sh | sh
