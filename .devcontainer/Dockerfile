@@ -1,14 +1,9 @@
 FROM mcr.microsoft.com/devcontainers/universal:2
 
-# Install additional OS packages.
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends \
-    software-properties-common
-
-RUN add-apt-repository ppa:deadsnakes/ppa
-
+# Install NodeJS repository
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 
+# Install additional OS packages
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
     postgresql-client \
@@ -21,9 +16,12 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     vim \
     htop \
     jq \
-    python3.12 \
-    python3.12-venv \
-    nodejs
+    python3 \
+    python3-venv \
+    python3-pip \
+    nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install uv for Python package management
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
