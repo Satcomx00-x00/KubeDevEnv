@@ -16,6 +16,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     vim \
     htop \
     jq \
+    gh \
     python3 \
     python3-venv \
     python3-pip \
@@ -36,6 +37,18 @@ RUN curl -L https://github.com/zellij-org/zellij/releases/latest/download/zellij
 
 # Install chezmoi
 RUN sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
+
+# Install kubectx and kubens
+RUN curl -LO https://github.com/ahmetb/kubectx/releases/latest/download/kubectx_linux_x86_64.tar.gz \
+    && tar -xzf kubectx_linux_x86_64.tar.gz \
+    && mv kubectx kubens /usr/local/bin/ \
+    && rm kubectx_linux_x86_64.tar.gz
+
+# Install k9s
+RUN curl -LO https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz \
+    && tar -xzf k9s_Linux_amd64.tar.gz \
+    && mv k9s /usr/local/bin/ \
+    && rm k9s_Linux_amd64.tar.gz
 
 # Install Rustup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
