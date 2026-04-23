@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "skills": [
+    "Satcomx00-x00/skills-db/skills/git",
+    "Satcomx00-x00/skills-db/skills/docker",
+    "Satcomx00-x00/skills-db/skills/code-review",
+    "Satcomx00-x00/skills-db/skills/security",
+    "Satcomx00-x00/skills-db/skills/testing",
+    "Satcomx00-x00/skills-db/skills/devops",
+    "Satcomx00-x00/skills-db/skills/frontend",
+    "Satcomx00-x00/skills-db/skills/backend",
+    "Satcomx00-x00/skills-db/skills/code-quality",
+    "Satcomx00-x00/skills-db/skills/languages/typescript",
+    "Satcomx00-x00/skills-db/skills/languages/python",
+    "Satcomx00-x00/skills-db/skills/betterauth",
+    "Satcomx00-x00/skills-db/skills/nextjs",
+    "Satcomx00-x00/skills-db/skills/saas"
+  ]
+}

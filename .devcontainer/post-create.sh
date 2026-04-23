@@ -44,6 +44,11 @@ if [ -d "/usr/share/powerlevel10k" ]; then
     fi
 fi
 
+# Install AI skills globally for all tools
+echo "Installing AI skills from Satcomx00-x00/skills-db..."
+npx skillfish install || echo "skillfish install completed with some warnings"
+echo "AI skills installed."
+
 # Print info
 echo "Environment setup complete."
 echo "Redis is available at host 'redis' port 6379."
