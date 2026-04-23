@@ -1,0 +1,9 @@
+[tools]
+uv = "latest"
+bun = "latest"
+rust = "latest"
+chezmoi = "latest"
+zellij = "latest"
+k9s = "latest"
+"aqua:supabase/cli" = "latest"
+"aqua:ahmetb/kubectx" = "latest"
