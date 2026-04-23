@@ -4,8 +4,8 @@ services:
   workspace:
     image: ghcr.io/satcomx00-x00/KubeDevEnv:latest
     build: 
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
     deploy:
       resources:
         reservations:

@@ -24,37 +24,17 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv for Python package management
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="$PATH:/root/.local/bin"
+# Install mise
+RUN curl https://mise.run | sh
+ENV PATH="/root/.local/bin:/root/.local/share/mise/shims:$PATH"
 
-# Install Supabase CLI
-RUN curl -sSf https://raw.githubusercontent.com/supabase/cli/main/install.sh | sh
-
-# Install Zellij
-RUN curl -L https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz | tar xz -C /usr/local/bin \
-    && chmod +x /usr/local/bin/zellij
-
-# Install chezmoi
-RUN sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
-
-# Install kubectx and kubens
-RUN curl -LO https://github.com/ahmetb/kubectx/releases/latest/download/kubectx_linux_x86_64.tar.gz \
-    && tar -xzf kubectx_linux_x86_64.tar.gz \
-    && mv kubectx kubens /usr/local/bin/ \
-    && rm kubectx_linux_x86_64.tar.gz
-
-# Install k9s
-RUN curl -LO https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz \
-    && tar -xzf k9s_Linux_amd64.tar.gz \
-    && mv k9s /usr/local/bin/ \
-    && rm k9s_Linux_amd64.tar.gz
-
-# Install Rustup
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Copy mise config and install CLI tools
+COPY mise.toml /root/.config/mise/config.toml
+RUN mise trust /root/.config/mise/config.toml \
+    && mise install --yes
 
 # Copy dotfiles submodule for later initialization
-COPY dotfiles /tmp/dotfiles
+COPY .devcontainer/dotfiles /tmp/dotfiles
 
 # Install Powerlevel10k
 RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/powerlevel10k
@@ -69,11 +49,6 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/
 
 # Install Python LLM libraries
 # RUN pip install --no-cache-dir torch torchvision torchaudio transformers accelerate bitsandbytes
-
-# Install Bun
-ENV BUN_INSTALL=/usr/local/bun
-ENV PATH=$BUN_INSTALL/bin:$PATH
-RUN curl -fsSL https://bun.sh/install | bash
 
 # Clean up
 RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
