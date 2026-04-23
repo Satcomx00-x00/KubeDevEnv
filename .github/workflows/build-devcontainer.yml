@@ -2,7 +2,7 @@ name: Build and Push Dev Container Image
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "copilot/trigger-image-build" ]
     paths:
       - '.devcontainer/**'
   workflow_dispatch:
